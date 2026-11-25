@@ -1,0 +1,392 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dream Cafe ☁</title>
+
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#fffaf3;color:#49352d;font-family:Georgia,serif}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
+.top{background:#49352d;color:white;text-align:center;padding:10px;font:12px Arial;letter-spacing:2px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 6%;background:#fffaf3;position:sticky;top:0;z-index:10;border-bottom:1px solid #eaded3}
+.logo{font-size:27px;font-weight:bold}.logo span{color:#b76e79}
+.navlinks{display:flex;gap:22px;font:14px Arial}
+.navlinks a:hover{color:#b76e79}
+button{transition:.2s}
+.btn{background:#b76e79;color:white;border:0;border-radius:30px;padding:13px 22px;font:14px Arial}
+.btn:hover{background:#9e5963;transform:translateY(-2px)}
+.cartbtn{background:white;border:1px solid #d9b9b4;border-radius:30px;padding:10px 15px}
+.hero{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;padding:65px 8%}
+.eyebrow{color:#b76e79;font:12px Arial;letter-spacing:2px;text-transform:uppercase}
+h1{font-size:clamp(45px,6vw,75px);line-height:1.05;margin:18px 0}
+p{font:15px/1.8 Arial;color:#866f64}
+.heroart{height:350px;background:#f4d9dc;border-radius:45%;display:grid;place-items:center;font-size:160px}
+.section{padding:70px 7%}
+.heading{text-align:center;margin-bottom:35px}
+.heading h2{font-size:42px;margin:12px}
+.searchbar{display:flex;justify-content:center;margin:20px auto;max-width:440px}
+.searchbar input{width:100%;padding:13px 18px;border:1px solid #e3c9c3;border-radius:30px;background:white;outline-color:#b76e79}
+.filters{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-bottom:28px}
+.filter{border:1px solid #d9b9b4;background:transparent;padding:10px 17px;border-radius:25px}
+.filter.active,.filter:hover{background:#49352d;color:white}
+.products{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.product{background:white;border-radius:20px;overflow:hidden;box-shadow:0 8px 25px #49352d12;transition:.2s}
+.product:hover{transform:translateY(-5px)}
+.visual{height:175px;display:grid;place-items:center;font-size:75px}
+.info{padding:17px}
+.info h3{margin:0 0 8px;font-size:19px}
+.info p{font-size:12px;min-height:38px}
+.bottom{display:flex;align-items:center;justify-content:space-between;font:bold 15px Arial}
+.add{width:38px;height:38px;border:0;border-radius:50%;background:#dce5d7;font-size:23px}
+.add:hover{background:#f4d9dc}
+.about{background:#f3e6dc;display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.aboutart{background:#dce5d7;border-radius:25px;min-height:280px;display:grid;place-items:center;font-size:100px}
+.about h2{font-size:42px}
+.visit{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.card{text-align:center;background:white;padding:25px;border-radius:20px;box-shadow:0 8px 25px #49352d12}
+.card h3{font-size:21px}
+.newsletter{text-align:center;background:#f4d9dc;padding:55px 20px}
+.newsletter form{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.newsletter input{padding:13px;border:1px solid #d9b9b4;border-radius:25px}
+footer{padding:25px;text-align:center;font:12px Arial;color:#866f64}
+.drawer{position:fixed;right:0;top:0;height:100vh;width:min(420px,100%);background:#fffaf3;padding:24px;z-index:30;transform:translateX(110%);transition:.25s;display:flex;flex-direction:column;box-shadow:-10px 0 35px #49352d20}
+.drawer.open{transform:translateX(0)}
+.drawerhead{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #eaded3}
+.drawerhead h2{font-size:28px}
+.close{border:0;background:transparent;font-size:28px}
+.cartitems{overflow:auto;flex:1}
+.cartrow{display:flex;align-items:center;gap:10px;padding:13px 0;border-bottom:1px solid #eaded3}
+.cartemoji{font-size:34px}
+.cartdetails{flex:1;font:13px Arial}
+.cartdetails strong{display:block;margin-bottom:5px}
+.qty{display:flex;align-items:center;gap:7px;font:13px Arial}
+.qty button{border:1px solid #d9b9b4;background:white;border-radius:50%;width:25px;height:25px}
+.cartfoot{border-top:1px solid #eaded3;padding-top:15px}
+.total{display:flex;justify-content:space-between;font:bold 16px Arial}
+.full{width:100%;margin-top:12px}
+.overlay{position:fixed;inset:0;background:#49352d66;z-index:20;opacity:0;pointer-events:none;transition:.2s}
+.overlay.show{opacity:1;pointer-events:auto}
+.modal{position:fixed;z-index:40;inset:0;background:#49352d66;display:none;align-items:center;justify-content:center;padding:15px}
+.modal.show{display:flex}
+.modalbox{background:#fffaf3;border-radius:22px;padding:25px;width:min(500px,100%);max-height:90vh;overflow:auto}
+.modalbox h2{margin-top:0}
+.modalbox label{display:block;font:13px Arial;margin:13px 0 6px}
+.modalbox input,.modalbox textarea,.modalbox select{width:100%;padding:12px;border:1px solid #d9b9b4;border-radius:12px;background:white}
+.receipt{background:#f3e6dc;border-radius:15px;padding:15px;margin:15px 0;font:13px/1.7 Arial}
+.toast{position:fixed;bottom:20px;left:50%;transform:translate(-50%,20px);opacity:0;background:#49352d;color:white;padding:13px 20px;border-radius:30px;font:13px Arial;z-index:50;transition:.2s;pointer-events:none}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:900px){.products{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){nav{flex-wrap:wrap;gap:14px}.navlinks{order:3;width:100%;justify-content:center;font-size:12px}.hero{grid-template-columns:1fr;padding:40px 6%}.heroart{height:250px;font-size:120px}.section{padding:50px 5%}.products{gap:12px}.visual{height:130px;font-size:60px}.info{padding:13px}.info h3{font-size:16px}.about{grid-template-columns:1fr}.visit{grid-template-columns:1fr}.heading h2{font-size:34px}}
+</style>
+</head>
+
+<body>
+
+<div class="top">A LITTLE TREAT, A LOT OF LOVE · FRESHLY MADE DAILY</div>
+
+<nav>
+<a class="logo" href="#home">dream<span> cafe ☁</span></a>
+<div class="navlinks">
+<a href="#home">Home</a>
+<a href="#menu">Menu</a>
+<a href="#about">Our Story</a>
+<a href="#visit">Visit Us</a>
+</div>
+<button class="cartbtn" onclick="openCart()">🛍 Bag (<span id="count">0</span>)</button>
+</nav>
+
+<section class="hero" id="home">
+<div>
+<div class="eyebrow">Welcome to Dream Cafe</div>
+<h1>Your cozy<br>little happy place.</h1>
+<p>Slow mornings, sweet treats, and coffee made with love. Come in, take a breath, and stay a little longer.</p>
+<a class="btn" href="#menu">Explore our menu →</a>
+</div>
+<div class="heroart">☕</div>
+</section>
+
+<section class="section" id="menu">
+<div class="heading">
+<div class="eyebrow">Made fresh, just for you</div>
+<h2>Little things to love</h2>
+<p>Find your new favorite sip or something sweet.</p>
+</div>
+
+<div class="searchbar">
+<input id="search" type="search" placeholder="Search your favorite treat..." oninput="renderProducts()">
+</div>
+
+<div class="filters">
+<button class="filter active" onclick="filterProducts('All',this)">All treats</button>
+<button class="filter" onclick="filterProducts('Coffee',this)">Coffee</button>
+<button class="filter" onclick="filterProducts('Tea',this)">Tea</button>
+<button class="filter" onclick="filterProducts('Pastry',this)">Pastries</button>
+<button class="filter" onclick="filterProducts('Dessert',this)">Desserts</button>
+</div>
+
+<div class="products" id="products"></div>
+</section>
+
+<section class="section about" id="about">
+<div class="aboutart">🧁🌷</div>
+<div>
+<div class="eyebrow">A little about us</div>
+<h2>Made for dreamy days.</h2>
+<p>Dream Cafe began with a simple wish: to create a warm, welcoming corner where everyone can enjoy a lovely cup and a little sweetness.</p>
+<p>We believe the best moments are often the small ones — a favorite latte, a fresh pastry, or a laugh shared with someone you love.</p>
+<a class="btn" href="#visit">Come say hello</a>
+</div>
+</section>
+
+<section class="section" id="visit">
+<div class="heading">
+<div class="eyebrow">Come find your cozy corner</div>
+<h2>We'd love to see you</h2>
+<p>Drop by for a sip, a snack, or a slow afternoon.</p>
+</div>
+<div class="visit">
+<div class="card"><h3>📍 Find us</h3><p>Dream Cafe<br>Cozy Corner, Philippines</p></div>
+<div class="card"><h3>🕰️ Opening hours</h3><p>Monday – Saturday<br>9 AM – 8 PM<br>Sunday: 10 AM – 6 PM</p></div>
+<div class="card"><h3>♡ Stay connected</h3><p>@dreamcafe<br>hello@dreamcafe.example</p></div>
+</div>
+</section>
+
+<section class="newsletter">
+<h2>A little note from us?</h2>
+<p>Join our sweet list for café news and special treats.</p>
+<form onsubmit="event.preventDefault();alert('You are on our sweet list! ♡')">
+<input type="email" placeholder="Your email address" required>
+<button class="btn">Sign me up</button>
+</form>
+</section>
+
+<footer>© 2026 Dream Cafe. Made with ♡ and a little daydream.</footer>
+
+<div class="overlay" id="overlay" onclick="closeCart()"></div>
+
+<aside class="drawer" id="drawer">
+<div class="drawerhead">
+<h2>Your little bag</h2>
+<button class="close" onclick="closeCart()">×</button>
+</div>
+<div class="cartitems" id="cartitems"></div>
+<div class="cartfoot">
+<div class="total"><span>Total</span><span id="total">₱0</span></div>
+<button class="btn full" onclick="checkout()">Proceed to checkout</button>
+</div>
+</aside>
+
+<div class="modal" id="checkoutModal">
+<div class="modalbox">
+<div id="checkoutContent">
+<h2>Let's make it official ♡</h2>
+<p>Enter your details to place your sample order.</p>
+<form id="checkoutForm">
+<label for="customerName">Full name</label>
+<input id="customerName" required placeholder="Your name">
+
+<label for="customerContact">Contact number</label>
+<input id="customerContact" required type="tel" placeholder="09XXXXXXXXX">
+
+<label for="customerAddress">Delivery address</label>
+<textarea id="customerAddress" required rows="3" placeholder="Your complete address"></textarea>
+
+<label for="payment">Payment method</label>
+<select id="payment" required>
+<option value="">Choose payment method</option>
+<option>Cash on delivery (sample)</option>
+<option>GCash (sample only)</option>
+<option>Pay at the cafe</option>
+</select>
+
+<div class="receipt" id="checkoutSummary"></div>
+<button class="btn full" type="submit">Place sample order</button>
+<button class="btn full" type="button" style="background:#dce5d7;color:#49352d" onclick="closeCheckout()">Go back</button>
+</form>
+</div>
+</div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const products=[
+{id:1,name:"Dreamy Vanilla Latte",category:"Coffee",price:145,emoji:"☕",desc:"Espresso, silky milk & vanilla.",bg:"#f3e2d4"},
+{id:2,name:"Caramel Cloud Macchiato",category:"Coffee",price:165,emoji:"🥤",desc:"Sweet caramel with a soft finish.",bg:"#ead2b7"},
+{id:3,name:"Classic Iced Americano",category:"Coffee",price:120,emoji:"🧋",desc:"Bold, refreshing and simple.",bg:"#e3d5c6"},
+{id:4,name:"Strawberry Matcha",category:"Tea",price:175,emoji:"🍵",desc:"Earthy matcha meets strawberry.",bg:"#dce8d6"},
+{id:5,name:"Honey Peach Tea",category:"Tea",price:135,emoji:"🍑",desc:"Light tea with a fruity hug.",bg:"#f5dfcf"},
+{id:6,name:"Pink Rose Milk",category:"Tea",price:150,emoji:"🥛",desc:"Floral, creamy and dreamy.",bg:"#f2d9df"},
+{id:7,name:"Butter Croissant",category:"Pastry",price:95,emoji:"🥐",desc:"Golden, flaky and buttery.",bg:"#f2dfbd"},
+{id:8,name:"Chocolate Chip Cookie",category:"Pastry",price:75,emoji:"🍪",desc:"Soft center, chocolate in every bite.",bg:"#e8d3c0"},
+{id:9,name:"Cinnamon Sugar Roll",category:"Pastry",price:115,emoji:"🥨",desc:"Warm cinnamon with sweet glaze.",bg:"#edd6b8"},
+{id:10,name:"Strawberry Shortcake",category:"Dessert",price:185,emoji:"🍰",desc:"Fluffy cake, cream and berries.",bg:"#f3dce0"},
+{id:11,name:"Matcha Cheesecake",category:"Dessert",price:195,emoji:"🍵",desc:"Creamy cheesecake with matcha.",bg:"#dce5d5"},
+{id:12,name:"Brownie Bliss",category:"Dessert",price:125,emoji:"🍫",desc:"Rich chocolate, fudgy goodness.",bg:"#e3cfc5"}
+];
+
+let cart=JSON.parse(localStorage.getItem("dreamCafeCart")||"{}");
+let currentFilter="All";
+
+function money(n){return "₱"+n.toLocaleString("en-PH")}
+
+function renderProducts(){
+const search=document.getElementById("search").value.toLowerCase();
+const list=products.filter(p=>
+(currentFilter==="All"||p.category===currentFilter)&&
+(p.name.toLowerCase().includes(search)||p.category.toLowerCase().includes(search))
+);
+document.getElementById("products").innerHTML=list.length?list.map(p=>`
+<article class="product">
+<div class="visual" style="background:${p.bg}">${p.emoji}</div>
+<div class="info">
+<h3>${p.name}</h3>
+<p>${p.desc}</p>
+<div class="bottom">
+<span>${money(p.price)}</span>
+<button class="add" aria-label="Add ${p.name}" onclick="addToCart(${p.id})">+</button>
+</div>
+</div>
+</article>
+`).join(""):"<p>No treats found. Try another search ♡</p>";
+}
+
+function filterProducts(category,button){
+currentFilter=category;
+document.querySelectorAll(".filter").forEach(b=>b.classList.remove("active"));
+button.classList.add("active");
+renderProducts();
+}
+
+function addToCart(id){
+cart[id]=(cart[id]||0)+1;
+saveCart();
+renderCart();
+showToast("Added to your bag ♡");
+}
+
+function changeQty(id,amount){
+cart[id]=(cart[id]||0)+amount;
+if(cart[id]<=0)delete cart[id];
+saveCart();
+renderCart();
+}
+
+function saveCart(){
+localStorage.setItem("dreamCafeCart",JSON.stringify(cart));
+}
+
+function renderCart(){
+const count=Object.values(cart).reduce((a,b)=>a+b,0);
+document.getElementById("count").textContent=count;
+
+const items=products.filter(p=>cart[p.id]);
+document.getElementById("cartitems").innerHTML=items.length?items.map(p=>`
+<div class="cartrow">
+<span class="cartemoji">${p.emoji}</span>
+<div class="cartdetails">
+<strong>${p.name}</strong>
+${money(p.price)} each
+</div>
+<div class="qty">
+<button onclick="changeQty(${p.id},-1)">−</button>
+${cart[p.id]}
+<button onclick="changeQty(${p.id},1)">+</button>
+</div>
+</div>
+`).join(""):"<p>Your bag is waiting for something sweet ♡</p>";
+
+const total=items.reduce((sum,p)=>sum+p.price*cart[p.id],0);
+document.getElementById("total").textContent=money(total);
+}
+
+function openCart(){
+document.getElementById("drawer").classList.add("open");
+document.getElementById("overlay").classList.add("show");
+}
+
+function closeCart(){
+document.getElementById("drawer").classList.remove("open");
+document.getElementById("overlay").classList.remove("show");
+}
+
+function checkout(){
+if(!Object.keys(cart).length){
+showToast("Add a treat to your bag first ♡");
+return;
+}
+closeCart();
+updateCheckoutSummary();
+document.getElementById("checkoutModal").classList.add("show");
+}
+
+function updateCheckoutSummary(){
+const items=products.filter(p=>cart[p.id]);
+const total=items.reduce((sum,p)=>sum+p.price*cart[p.id],0);
+document.getElementById("checkoutSummary").innerHTML=
+"<strong>Order summary</strong><br>"+
+items.map(p=>`${p.name} × ${cart[p.id]} — ${money(p.price*cart[p.id])}`).join("<br>")+
+`<hr><strong>Total: ${money(total)}</strong>`;
+}
+
+function closeCheckout(){
+document.getElementById("checkoutModal").classList.remove("show");
+}
+
+document.getElementById("checkoutForm").addEventListener("submit",function(e){
+e.preventDefault();
+
+const name=document.getElementById("customerName").value;
+const items=products.filter(p=>cart[p.id]);
+const total=items.reduce((sum,p)=>sum+p.price*cart[p.id],0);
+const orderNumber="DC"+Math.floor(10000+Math.random()*90000);
+
+document.getElementById("checkoutContent").innerHTML=`
+<h2>Order received, ${name}! ♡</h2>
+<p>Thank you for choosing Dream Cafe.</p>
+<div class="receipt">
+<strong>Order number: ${orderNumber}</strong><br><br>
+${items.map(p=>`${p.emoji} ${p.name} × ${cart[p.id]} — ${money(p.price*cart[p.id])}`).join("<br>")}
+<hr>
+<strong>Total: ${money(total)}</strong><br>
+Payment: ${document.getElementById("payment").value}<br>
+<br>This is a sample order confirmation. No payment or real delivery has been processed.
+</div>
+<button class="btn full" onclick="finishOrder()">Done</button>
+`;
+});
+
+function finishOrder(){
+cart={};
+saveCart();
+renderCart();
+closeCheckout();
+location.reload();
+}
+
+let toastTimer;
+function showToast(message){
+const el=document.getElementById("toast");
+el.textContent=message;
+el.classList.add("show");
+clearTimeout(toastTimer);
+toastTimer=setTimeout(()=>el.classList.remove("show"),2200);
+}
+
+document.addEventListener("keydown",e=>{
+if(e.key==="Escape"){
+closeCart();
+closeCheckout();
+}
+});
+
+renderProducts();
+renderCart();
+</script>
+</body>
+</html>
